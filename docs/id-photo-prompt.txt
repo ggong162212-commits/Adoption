@@ -1,0 +1,48 @@
+Turn this photo into a clean studio pet portrait.
+
+IDENTITY (highest priority): Keep the dog exactly as it is — same breed,
+face structure, fur color and texture, eye shape and color, nose, ear
+position, and markings. Do not beautify, reshape, or stylize the face.
+
+BACKGROUND: Seamless studio backdrop, single flat neutral tone with a very
+subtle top-to-bottom gradient and gentle vignette. No props, no pattern,
+no floor line, no horizon.
+Choose the backdrop tone based on the dog's coat so the silhouette stays
+clearly separated from the background:
+- White / cream / light coat  -> warm light grey  #EAE7E3
+- Black / dark / grey coat    -> bright off-white #F5F3F0
+- Tan / brown / mixed coat    -> neutral off-white #F0EEEB
+Never let the backdrop fall within the same tonal range as the coat.
+Edge separation must remain visible along the entire outline.
+
+LIGHTING: Large softbox at 45° above-front, subtle fill from the opposite
+side, soft rim light to separate fur from the background. Even and
+diffused. No harsh shadows, no blown highlights. Preserve individual fur
+strands, especially along the edges.
+
+EXPRESSION: Natural and relaxed. Mouth slightly open in a normal panting
+position, tongue only if already visible. Bright alert eyes with a small
+natural catchlight. Do NOT create a human-like grin, do NOT widen or curl
+the lips, do NOT add teeth. If the dog is not smiling in the original,
+keep a calm gentle expression rather than forcing one.
+If the eyes have no catchlight in the source, add one small soft catchlight
+per eye at the 10–11 o'clock position. Do not enlarge or brighten the eyes.
+
+FRAMING: Head-and-chest portrait, centered, slight negative space above
+the head, eye-level camera, 85mm lens look at f/2.8 — sharp on the eyes.
+
+GEOMETRY LOCK: Keep the original head angle and facial proportions exactly.
+If the source photo is shot from above, correct only the perceived camera
+height toward eye level — do NOT re-render or re-proportion the muzzle,
+skull, or eye spacing to match the new angle. Preserving identity outranks
+achieving a perfect eye-level look.
+
+FINISH: Neutral white balance, natural fur tones, gentle contrast. No
+filter, no HDR, no oversaturation. Clean, warm, minimal.
+
+AVOID: forced smile, human-like grin, exaggerated teeth, cartoon eyes,
+distorted muzzle, changed breed, plastic AI-smooth fur, busy background,
+props, text, watermark, oversaturation, harsh shadows, wide-angle
+distortion.
+
+Output: 1:1 square, high resolution.

@@ -58,7 +58,7 @@
   }
 
   /* ── 캔버스로 증명사진 PNG 합성 ─────────────────────── */
-  var W = 900, PH = 1200, CAP = 250, H = PH + CAP;
+  var W = 900, PH = 1200, CAP = 260, H = PH + CAP;
 
   function loadImage(src) {
     return new Promise(function (resolve, reject) {
@@ -117,19 +117,19 @@
 
       ctx.fillStyle = '#1F2937';
       ctx.font = '900 66px ' + f;
-      ctx.fillText(dog.name || '이름 미정', 56, PH + 96);
+      ctx.fillText(dog.name || '이름 미정', 56, PH + 92);
 
       var meta = metaLine(dog);
       if (meta) {
         ctx.fillStyle = '#6B7280';
         ctx.font = '600 36px ' + f;
-        ctx.fillText(meta, 56, PH + 152);
+        ctx.fillText(meta, 56, PH + 148);
       }
 
       var st = status(dog);
       ctx.fillStyle = '#9CA3AF';
       ctx.font = '700 28px ' + f;
-      ctx.fillText('천보금 유기견 보호소 · ' + (dog.room || '') + ' · ' + st.label, 56, PH + 208);
+      ctx.fillText('천보금 유기견 보호소 · ' + (dog.room || '') + ' · ' + st.label, 56, PH + 204);
 
       return new Promise(function (resolve, reject) {
         cv.toBlob(function (b) {

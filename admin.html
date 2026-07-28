@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>관리자 — 천보금 입양</title>
+<meta name="theme-color" content="#F3F6FB">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  main { padding: 14px 16px calc(90px + var(--safe-bottom)); }
+
+  /* 토큰 등록 화면 */
+  .gate { max-width: 520px; margin: 0 auto; padding: 24px 18px calc(40px + var(--safe-bottom)); }
+  .gate h2 { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .gate .lead { font-size: 14px; color: var(--text-sub); line-height: 1.65; margin-bottom: 20px; }
+  .steps { counter-reset: s; margin: 0 0 18px; padding: 0; list-style: none; }
+  .steps li {
+    counter-increment: s; position: relative; padding: 0 0 12px 30px;
+    font-size: 13.5px; line-height: 1.6; color: var(--text);
+  }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 1px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--brand); color: #fff;
+    font-size: 11px; font-weight: 800; display: grid; place-items: center;
+  }
+  .steps code {
+    background: var(--brand-soft); color: var(--brand-dark);
+    padding: 1px 6px; border-radius: 5px; font-size: 12.5px; font-weight: 700;
+  }
+  .warn-box {
+    background: #FDF4DC; border: 1px solid #F0E0B0; color: #7A5D12;
+    border-radius: var(--radius-sm); padding: 12px 13px;
+    font-size: 12.5px; line-height: 1.6; margin-bottom: 18px;
+  }
+
+  /* 탭 */
+  .tabs {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    padding-bottom: var(--safe-bottom);
+    display: flex;
+  }
+  .tabs button {
+    flex: 1; padding: 9px 4px 10px; font-size: 11px; font-weight: 700;
+    color: var(--text-faint); display: grid; gap: 3px; justify-items: center;
+    min-height: 56px;
+  }
+  .tabs button i { font-style: normal; font-size: 19px; line-height: 1; }
+  .tabs button.on { color: var(--brand); }
+
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 15px; margin-bottom: 14px;
+  }
+  .card > h3 {
+    font-size: 14px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* 크롭 */
+  .crop-frame {
+    /* 높이를 직접 제한하면 3:4 가 깨지므로, 폭으로만 크기를 정한다 (3:4 → 52vh 높이 ≈ 39vh 폭) */
+    position: relative; aspect-ratio: 3/4;
+    margin: 0 auto 10px; width: min(300px, 39vh, 100%);
+    background: #20242B; border-radius: var(--radius); overflow: hidden;
+    display: grid; place-items: center;
+  }
+  .crop-frame .hintlayer {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: #8A93A0; font-size: 13px; text-align: center; padding: 20px;
+    pointer-events: none; line-height: 1.6;
+  }
+  .crop-frame.has-img .hintlayer { display: none; }
+  .crop-frame .guide {
+    position: absolute; inset: 8%; z-index: 1;
+    border: 1px dashed rgba(255,255,255,.45);
+    border-radius: 8px; pointer-events: none;
+  }
+  .crop-frame.has-img .guide { display: block; }
+  .crop-frame:not(.has-img) .guide { display: none; }
+  .zoom-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .zoom-row input[type=range] { flex: 1; accent-color: var(--brand); }
+  .zoom-row span { font-size: 12px; color: var(--text-faint); font-weight: 700; }
+  .pick-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .preview-wrap { max-width: 180px; margin: 0 auto; }
+
+  /* 목록 */
+  .dog-row {
+    display: flex; gap: 11px; align-items: center; width: 100%; text-align: left;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 9px; margin-bottom: 8px;
+  }
+  .dog-row:active { background: #FAFBFD; }
+  .dog-row .thumb {
+    width: 48px; height: 64px; border-radius: 8px; flex: none;
+    object-fit: cover; background: #EDF1F7;
+  }
+  .dog-row .thumb.ph { display: grid; place-items: center; font-size: 20px; }
+  .dog-row .info { flex: 1; min-width: 0; }
+  .dog-row .nm { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+  .dog-row .mt { font-size: 12px; color: var(--text-sub); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .list-filter { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 4px; }
+  .list-filter button {
+    flex: none; padding: 7px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+    background: var(--surface); border: 1px solid var(--line); color: var(--text-sub);
+  }
+  .list-filter button.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  /* 방 편집 */
+  .room-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .room-row .ic { width: 52px; text-align: center; }
+  .room-row .nm { flex: 1; }
+  .room-row .co { width: 46px; padding: 0; height: var(--tap); border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); }
+
+  .status-bar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--ok-soft); color: var(--ok);
+    font-size: 12px; font-weight: 700; padding: 7px 16px; text-align: center;
+  }
+  .status-bar.err { background: #FDF1F1; color: var(--danger); }
+  .status-bar.busy { background: var(--warn-soft); color: var(--warn); }
+
+  .divider { height: 1px; background: var(--line); margin: 14px 0; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; word-break: break-all; }
+</style>
+</head>
+<body>
+
+<!-- 토큰 미등록 화면 -->
+<section id="gate" class="gate" hidden>
+  <h2>🔐 관리자 연결</h2>
+  <p class="lead">
+    이 화면은 <b>천보금 입양 사이트에 아이들을 등록</b>하는 곳입니다.<br>
+    GitHub 토큰을 한 번 등록하면 이 기기에 저장되어, 다음부터는 바로 열립니다.
+  </p>
+
+  <div class="warn-box">
+    <b>토큰은 비밀번호와 같습니다.</b> 이 기기(본인 폰)에만 저장하세요.
+    공용 PC에서는 사용을 마친 뒤 반드시 <b>토큰 지우기</b>를 눌러 주세요.
+  </div>
+
+  <ol class="steps">
+    <li>GitHub → 우측 상단 프로필 → <code>Settings</code></li>
+    <li>맨 아래 <code>Developer settings</code> → <code>Personal access tokens</code> → <code>Fine-grained tokens</code></li>
+    <li><code>Generate new token</code> 클릭</li>
+    <li>Repository access → <b>Only select repositories</b> → <code>Adoption</code> 만 선택</li>
+    <li>Permissions → Repository permissions → <b>Contents</b> 를 <code>Read and write</code> 로</li>
+    <li>Expiration 은 <b>90일</b> 정도로 두고 생성 → 나온 토큰(<code>github_pat_…</code>)을 복사</li>
+  </ol>
+
+  <label class="field">
+    <span>토큰 붙여넣기</span>
+    <input id="tokenInput" class="input mono" type="password" placeholder="github_pat_..." autocomplete="off" spellcheck="false">
+  </label>
+  <button id="connectBtn" class="btn btn-primary btn-block">연결하기</button>
+  <p class="hint" id="gateMsg"></p>
+</section>
+
+<!-- 관리자 본화면 -->
+<div id="app" hidden>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <div style="flex:1; min-width:0">
+        <h1 id="adminTitle">관리자</h1>
+        <div class="sub" id="adminSub">천보금 입양</div>
+      </div>
+      <a class="icon-btn" href="./" title="사이트 보기" aria-label="사이트 보기">🏠</a>
+    </div>
+  </header>
+  <div id="statusBar" class="status-bar" hidden></div>
+
+  <main class="wrap">
+
+    <!-- 등록/수정 -->
+    <section class="panel on" id="panel-add">
+      <div class="card">
+        <h3 id="formTitle">🐶 새 아이 등록</h3>
+
+        <div class="crop-frame" id="cropFrame">
+          <div class="guide"></div>
+          <div class="hintlayer">사진을 선택하면<br>3:4 증명사진으로 자를 수 있어요<br><br>손가락으로 옮기고, 두 손가락으로 확대</div>
+        </div>
+
+        <div class="zoom-row">
+          <span>확대</span>
+          <input type="range" id="zoomRange" min="1" max="4" step="0.01" value="1" aria-label="확대">
+        </div>
+
+        <div class="pick-row">
+          <button class="btn" id="pickCamera">📷 촬영</button>
+          <button class="btn" id="pickFile">🖼️ 앨범</button>
+        </div>
+        <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
+        <input type="file" id="fileAlbum" accept="image/*" hidden>
+
+        <button class="btn btn-block" id="copyPrompt" style="margin-top:8px">✨ 증명사진 프롬프트 복사</button>
+        <p class="hint">사진을 AI 이미지 도구로 스튜디오 증명사진처럼 다듬고 싶을 때 이 프롬프트를 복사해 쓰세요. 원래 얼굴을 그대로 유지하도록 만들어져 있습니다.</p>
+      </div>
+
+      <div class="card">
+        <h3>📋 정보</h3>
+        <label class="field"><span>이름 *</span>
+          <input id="fName" class="input" type="text" placeholder="예: 마루" maxlength="20"></label>
+        <div class="row2">
+          <label class="field"><span>방 *</span><select id="fRoom" class="select"></select></label>
+          <label class="field"><span>성별</span>
+            <select id="fGender" class="select">
+              <option value="남">남아</option><option value="여">여아</option><option value="미상">미상</option>
+            </select></label>
+        </div>
+        <label class="field"><span>추정 나이</span>
+          <input id="fAge" class="input" type="text" placeholder="예: 11살 이상 추정 / 22년 4월생" maxlength="30"></label>
+        <label class="field"><span>상태</span>
+          <select id="fStatus" class="select">
+            <option value="adoptable">입양 가능</option>
+            <option value="pending">입양 진행중</option>
+            <option value="foster">임시보호중</option>
+            <option value="adopted">입양 완료</option>
+          </select></label>
+        <label class="field"><span>특징 · 성격 · 사연</span>
+          <textarea id="fNote" class="textarea" placeholder="예: 산속 보호소에서 구조. 사람을 무척 좋아하고 산책을 잘 합니다." maxlength="500"></textarea></label>
+      </div>
+
+      <div class="card">
+        <h3>👀 미리보기</h3>
+        <div class="preview-wrap"><div class="idcard" id="previewCard"></div></div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="saveBtn">저장하기</button>
+      <button class="btn btn-block" id="cancelEdit" hidden style="margin-top:8px">수정 취소</button>
+      <p class="hint" style="text-align:center">저장하면 GitHub에 커밋되고, 약 1분 뒤 사이트에 반영됩니다.</p>
+    </section>
+
+    <!-- 목록 -->
+    <section class="panel" id="panel-list">
+      <div class="list-filter" id="listFilter"></div>
+      <div id="dogList"></div>
+    </section>
+
+    <!-- 방 관리 -->
+    <section class="panel" id="panel-rooms">
+      <div class="card">
+        <h3>🏠 방 관리</h3>
+        <p class="hint" style="margin:0 0 12px">아이콘 · 이름 · 색을 바꿀 수 있습니다. 이름을 바꾸면 그 방의 아이들도 함께 옮겨집니다.</p>
+        <div id="roomEditor"></div>
+        <button class="btn btn-block" id="addRoom" style="margin-top:6px">+ 방 추가</button>
+      </div>
+      <button class="btn btn-primary btn-block" id="saveRooms">방 정보 저장</button>
+    </section>
+
+    <!-- 설정 -->
+    <section class="panel" id="panel-settings">
+      <div class="card">
+        <h3>⚙️ 사이트 설정</h3>
+        <label class="field"><span>사이트 제목</span><input id="sTitle" class="input" type="text" maxlength="30"></label>
+        <label class="field"><span>부제</span><input id="sTagline" class="input" type="text" maxlength="40"></label>
+        <label class="field"><span>공지 (비우면 표시 안 함)</span><textarea id="sNotice" class="textarea" maxlength="200"></textarea></label>
+        <div class="divider"></div>
+        <label class="field"><span>전화번호</span><input id="sPhone" class="input" type="tel" placeholder="010-0000-0000"></label>
+        <label class="field"><span>카카오톡 채널/오픈채팅 링크</span><input id="sKakao" class="input" type="url" placeholder="https://"></label>
+        <label class="field"><span>인스타그램 링크</span><input id="sInsta" class="input" type="url" placeholder="https://"></label>
+        <button class="btn btn-primary btn-block" id="saveSite">설정 저장</button>
+      </div>
+
+      <div class="card">
+        <h3>🔐 토큰</h3>
+        <p class="hint" id="tokenInfo" style="margin:0 0 12px"></p>
+        <button class="btn btn-danger btn-block" id="logoutBtn">토큰 지우기</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button data-tab="add" class="on"><i>➕</i>등록</button>
+    <button data-tab="list"><i>📖</i>목록</button>
+    <button data-tab="rooms"><i>🏠</i>방</button>
+    <button data-tab="settings"><i>⚙️</i>설정</button>
+  </nav>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/idcard.js"></script>
+<script src="assets/gh.js"></script>
+<script src="assets/cropper.js"></script>
+<script src="assets/admin.js"></script>
+</body>
+</html>

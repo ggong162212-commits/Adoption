@@ -28,6 +28,9 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+/* .btn / .icon-btn 등이 display 를 지정하므로 hidden 속성이 밀리지 않도록 못박는다 */
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
