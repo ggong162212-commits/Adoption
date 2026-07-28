@@ -111,7 +111,8 @@
       var url = URL.createObjectURL(file);
       var img = new Image();
       img.onload = function () {
-        self.clear();
+        self.clear();            // 이전 이미지와 그 blob URL 정리
+        self._objectUrl = url;   // clear() 뒤에 등록해야 방금 만든 URL 이 살아남는다
         self.img = img;
         self.natural = { w: img.naturalWidth, h: img.naturalHeight };
         img.draggable = false;
@@ -128,9 +129,8 @@
         self.reset();
         resolve({ width: img.naturalWidth, height: img.naturalHeight });
       };
-      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('이미지를 읽지 못했습니다.')); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('사진을 읽지 못했습니다.')); };
       img.src = url;
-      self._objectUrl = url;
     });
   };
 

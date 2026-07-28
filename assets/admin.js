@@ -20,6 +20,39 @@
 
   var cropper = null;
 
+  /* ── 아이콘 · 테마 ──────────────────────────── */
+  $('gateMark').innerHTML = Icon('lock');
+  $('gateWarn').insertAdjacentHTML('afterbegin', Icon('heart'));
+  $('cropHint').innerHTML = Icon('image') +
+    '<span>사진을 고르면 3:4 증명사진으로 자를 수 있어요<br>손가락으로 옮기고, 두 손가락으로 확대</span>';
+  $('pickCamera').innerHTML = Icon('camera') + '촬영';
+  $('pickFile').innerHTML = Icon('image') + '앨범';
+  $('copyPrompt').innerHTML = Icon('sparkle') + '증명사진 프롬프트 복사';
+  $('siteLink').innerHTML = Icon('home');
+  document.querySelectorAll('.tabs button').forEach(function (b) {
+    b.insertAdjacentHTML('afterbegin', Icon(b.dataset.icon));
+  });
+
+  var THEME_KEY = 'adoption.theme';
+  function currentTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+    if (saved === 'light' || saved === 'dark') return saved;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function paintThemeButton() {
+    var dark = currentTheme() === 'dark';
+    $('themeBtn').innerHTML = Icon(dark ? 'sun' : 'moon');
+    $('themeBtn').setAttribute('aria-label', dark ? '밝은 화면으로' : '어두운 화면으로');
+  }
+  $('themeBtn').addEventListener('click', function () {
+    var next = currentTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+    paintThemeButton();
+  });
+  paintThemeButton();
+
   /* ── 공통 UI ────────────────────────────────── */
   var toastTimer;
   function toast(msg) {
@@ -204,7 +237,7 @@
   function resetForm() {
     state.editingId = null;
     state.editingPhotoUrl = '';
-    $('formTitle').textContent = '🐶 새 아이 등록';
+    $('formTitle').textContent = '새 아이 등록';
     $('fName').value = ''; $('fAge').value = ''; $('fNote').value = '';
     $('fGender').value = '남'; $('fStatus').value = 'adoptable';
     if (state.rooms.length) $('fRoom').value = state.rooms[0].id;
@@ -306,7 +339,7 @@
     });
 
     if (!list.length) {
-      $('dogList').innerHTML = '<div class="empty"><div class="emoji">🐾</div>' +
+      $('dogList').innerHTML = '<div class="empty"><div class="mark">' + Icon('paw') + '</div>' +
         '<h3>' + (state.dogs.length ? '해당하는 아이가 없어요' : '아직 등록된 아이가 없어요') + '</h3>' +
         '<p>' + (state.dogs.length ? '다른 상태를 눌러보세요.' : '등록 탭에서 첫 아이를 추가해 보세요.') + '</p></div>';
       return;
@@ -316,7 +349,7 @@
       var st = IDCard.status(d);
       var thumb = d.photo
         ? '<img class="thumb" src="' + esc(d.photo) + '" alt="" loading="lazy">'
-        : '<div class="thumb ph">🐾</div>';
+        : '<div class="thumb ph">' + Icon.filled('paw') + '</div>';
       var meta = [d.room, IDCard.metaLine(d)].filter(Boolean).join(' · ');
       return '<button class="dog-row" data-edit="' + esc(d.id) + '">' + thumb +
         '<div class="info"><div class="nm">' + esc(d.name) + '</div>' +
@@ -344,7 +377,7 @@
     state.editingId = id;
     // 방금 바꾼 사진이 캐시에 걸리지 않도록, 편집을 시작할 때 한 번만 버전을 붙인다
     state.editingPhotoUrl = d.photo ? d.photo + '?v=' + Date.now() : '';
-    $('formTitle').textContent = '✏️ ' + d.name + ' 수정';
+    $('formTitle').textContent = d.name + ' 수정';
     $('fName').value = d.name || '';
     if (state.rooms.some(function (r) { return r.id === d.room; })) $('fRoom').value = d.room;
     $('fGender').value = d.gender || '남';
@@ -361,7 +394,7 @@
       del.id = 'deleteBtn';
       del.className = 'btn btn-danger btn-block';
       del.style.marginTop = '8px';
-      del.textContent = '이 아이 삭제';
+      del.innerHTML = Icon('trash') + '이 아이 삭제';
       del.addEventListener('click', removeDog);
       $('cancelEdit').after(del);
     }
@@ -401,8 +434,9 @@
       return '<div class="room-row" data-i="' + i + '" data-orig="' + esc(r.id) + '">' +
         '<input class="input ic" type="text" value="' + esc(r.icon || '🏠') + '" maxlength="4" aria-label="아이콘">' +
         '<input class="input nm" type="text" value="' + esc(r.id) + '" maxlength="12" aria-label="방 이름">' +
-        '<input class="co" type="color" value="' + esc(r.color || '#CCCCCC') + '" aria-label="색">' +
-        '<button class="btn btn-danger" data-del="' + i + '" style="padding:0 12px" title="' + n + '마리">✕</button>' +
+        '<input class="co" type="color" value="' + esc(r.color || '#3E6B4C') + '" aria-label="색">' +
+        '<button class="btn btn-danger del" data-del="' + i + '" aria-label="' + esc(r.id) + ' 삭제"' +
+          ' title="' + n + '마리">' + Icon('trash') + '</button>' +
       '</div>';
     }).join('') || '<p class="hint">방이 없습니다. 아래에서 추가해 주세요.</p>';
   }
