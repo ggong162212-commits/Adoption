@@ -89,9 +89,9 @@
 
   /* ── 크롭 ── */
   .crop-frame {
-    /* 높이를 직접 제한하면 3:4 가 깨지므로 폭으로만 크기를 정한다 (3:4 → 52vh 높이 ≈ 39vh 폭) */
-    position: relative; aspect-ratio: 3/4;
-    margin: 0 auto 11px; width: min(280px, 39vh, 100%);
+    /* 높이를 직접 제한하면 1:1 이 깨지므로 폭으로만 크기를 정한다 */
+    position: relative; aspect-ratio: 1/1;
+    margin: 0 auto 11px; width: min(300px, 46vh, 100%);
     background: #191D16; border-radius: 16px; overflow: hidden;
     display: grid; place-items: center;
   }
@@ -125,7 +125,7 @@
   }
   .dog-row:active { transform: scale(.99); }
   .dog-row .thumb {
-    width: 46px; height: 61px; border-radius: 8px; flex: none;
+    width: 54px; height: 54px; border-radius: 10px; flex: none;
     object-fit: cover; background: var(--ground-2);
   }
   .dog-row .thumb.ph { display: grid; place-items: center; color: var(--ink-3); }

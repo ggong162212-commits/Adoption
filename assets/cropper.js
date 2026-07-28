@@ -1,9 +1,9 @@
-/* 3:4 증명사진 크롭 — 외부 라이브러리 없음.
+/* 정사각 증명사진 크롭 — 외부 라이브러리 없음.
    한 손가락 드래그로 이동, 두 손가락 핀치로 확대, 마우스 휠/슬라이더도 지원. */
 (function (global) {
   'use strict';
 
-  var OUT_W = 900, OUT_H = 1200;   // 3:4
+  var OUT_W = 900, OUT_H = 900;   // 1:1 — 증명사진 프롬프트 출력 규격
   var MAX_ZOOM = 4;
 
   function Cropper(frameEl, zoomInput) {
@@ -176,7 +176,7 @@
     this.pinch = null;
   };
 
-  /** 잘라낸 3:4 영역을 WebP(미지원 시 JPEG) Blob 으로 */
+  /** 잘라낸 정사각 영역을 WebP(미지원 시 JPEG) Blob 으로 */
   Cropper.prototype.toBlob = function () {
     var self = this;
     if (!this.img) return Promise.reject(new Error('사진을 먼저 선택해 주세요.'));
@@ -184,10 +184,10 @@
     var r = this.frame.getBoundingClientRect();
     var s = this.base * this.zoom;
 
-    // 프레임이 어떤 이유로든 3:4 가 아니게 되어도(짧은 화면 등) 중앙의 3:4 영역만 잘라
+    // 프레임이 어떤 이유로든 정사각이 아니게 되어도(짧은 화면 등) 중앙의 정사각 영역만 잘라
     // 결과물이 늘어나지 않게 한다.
-    var tw = Math.min(r.width, r.height * 3 / 4);
-    var th = tw * 4 / 3;
+    var tw = Math.min(r.width, r.height);
+    var th = tw;
     var offX = (r.width - tw) / 2, offY = (r.height - th) / 2;
 
     var sx = (offX - this.ox) / s, sy = (offY - this.oy) / s;

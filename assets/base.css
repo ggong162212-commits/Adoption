@@ -264,7 +264,8 @@ button.idcard:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); 
 button.idcard:active { transform: scale(.985); }
 
 .idcard-photo {
-  position: relative; aspect-ratio: 3 / 4;
+  /* 증명사진 프롬프트가 1:1 로 뽑아주므로 카드도 정사각형이다 */
+  position: relative; aspect-ratio: 1 / 1;
   background: linear-gradient(168deg, var(--ground-2) 0%, var(--ground) 100%);
   overflow: hidden;
 }

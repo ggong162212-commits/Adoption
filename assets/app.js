@@ -213,7 +213,7 @@
   function render() {
     if (!state.loaded) {
       $('content').innerHTML = '<div class="dog-grid" style="padding-top:12px">' +
-        '<div class="skeleton" style="aspect-ratio:3/4"></div>'.repeat(4) + '</div>';
+        '<div class="skeleton" style="aspect-ratio:1/1"></div>'.repeat(4) + '</div>';
       return;
     }
     if (state.error) {

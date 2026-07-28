@@ -24,7 +24,7 @@
   $('gateMark').innerHTML = Icon('lock');
   $('gateWarn').insertAdjacentHTML('afterbegin', Icon('heart'));
   $('cropHint').innerHTML = Icon('image') +
-    '<span>사진을 고르면 3:4 증명사진으로 자를 수 있어요<br>손가락으로 옮기고, 두 손가락으로 확대</span>';
+    '<span>사진을 고르면 증명사진 규격으로 자를 수 있어요<br>손가락으로 옮기고, 두 손가락으로 확대</span>';
   $('pickCamera').innerHTML = Icon('camera') + '촬영';
   $('pickFile').innerHTML = Icon('image') + '앨범';
   $('copyPrompt').innerHTML = Icon('sparkle') + '증명사진 프롬프트 복사';

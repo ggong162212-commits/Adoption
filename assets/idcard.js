@@ -66,7 +66,7 @@
   }
 
   /* ── 캔버스로 증명사진 PNG 합성 ─────────────────────── */
-  var W = 900, PH = 1200, CAP = 264, H = PH + CAP;
+  var W = 900, PH = 900, CAP = 264, H = PH + CAP;
   var DISPLAY = "'Hahmlet', 'Nanum Myeongjo', serif";
   var BODY = "'IBM Plex Sans KR', -apple-system, 'Apple SD Gothic Neo', sans-serif";
 
@@ -97,7 +97,7 @@
     ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
   }
 
-  /** dog -> PNG Blob (3:4 사진 + 캡션 밴드) */
+  /** dog -> PNG Blob (정사각 사진 + 캡션 밴드) */
   function toBlob(dog, opts) {
     opts = opts || {};
     var src = dog.photoUrl || (dog.photo ? (opts.base || '') + dog.photo : '');
