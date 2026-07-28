@@ -275,20 +275,39 @@
   /* ── 상세 시트 ──────────────────────────────── */
   var sheetOpenId = null;
 
+  /** 지금 보고 있던 목록 — 이전·다음은 이 순서를 따른다 */
+  function currentList() {
+    if (state.query.trim()) return visible(search(state.query));
+    if (bgRoute.view === 'room') return visible(inRoom(bgRoute.room));
+    return visible(state.dogs);
+  }
+
   function openSheet(id) {
     var dog = state.dogs.filter(function (d) { return d.id === id; })[0];
     if (!dog) { toast('해당 아이를 찾을 수 없어요.'); history.replaceState(null, '', '#'); return; }
     if (sheetOpenId === id) return;
+    var isFirstOpen = sheetOpenId === null;
     sheetOpenId = id;
+
+    // 이전·다음
+    var list = currentList();
+    var idx = -1;
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) { idx = i; break; }
+    $('prevDog').disabled = idx <= 0;
+    $('nextDog').disabled = idx < 0 || idx >= list.length - 1;
+    $('dogPos').textContent = idx >= 0 ? (idx + 1) + ' / ' + list.length : '';
+    $('prevDog').dataset.go = idx > 0 ? list[idx - 1].id : '';
+    $('nextDog').dataset.go = (idx >= 0 && idx < list.length - 1) ? list[idx + 1].id : '';
 
     var st = IDCard.status(dog);
     var facts = [['방', dog.room], ['성별', dog.gender === '남' ? '남아' : dog.gender === '여' ? '여아' : '미상']]
       .filter(function (f) { return f[1]; });
 
     var c = state.site.contact || {};
-    var contactBtns = '';
-    if (c.phone) contactBtns += '<a class="btn" href="tel:' + esc(c.phone) + '">' + Icon('phone') + '전화 문의</a>';
-    if (c.kakaoUrl) contactBtns += '<a class="btn" href="' + esc(c.kakaoUrl) + '" target="_blank" rel="noopener">' + Icon('chat') + '카톡 문의</a>';
+    var cta = '';
+    if (c.kakaoUrl) cta += '<a class="btn btn-primary" href="' + esc(c.kakaoUrl) + '" target="_blank" rel="noopener">' + Icon('chat') + esc(dog.name) + ' 문의하기</a>';
+    if (c.phone) cta += '<a class="btn" href="tel:' + esc(c.phone) + '">' + Icon('phone') + '전화</a>';
+    if (!cta) cta = '<button class="btn btn-primary" id="closeSheet2">닫기</button>';
 
     var subBits = [];
     if (dog.ageText) subBits.push(dog.ageText);
@@ -311,17 +330,20 @@
       '<div class="sheet-actions">' +
         '<button class="btn" id="saveCard">' + Icon('download') + '증명사진 저장</button>' +
         '<button class="btn" id="shareLink">' + Icon('share') + '링크 공유</button>' +
-        (contactBtns ? '<div class="span2" style="display:grid;grid-template-columns:repeat(' +
-          (c.phone && c.kakaoUrl ? 2 : 1) + ',1fr);gap:8px">' + contactBtns + '</div>' : '') +
-        '<button class="btn btn-primary span2" id="closeSheet">닫기</button>' +
-      '</div>';
+      '</div>' +
+      '<div class="sheet-cta' + (c.kakaoUrl && c.phone ? ' two' : '') + '">' + cta + '</div>';
+
+    $('sheet').scrollTop = 0;
+    if ($('closeSheet2')) $('closeSheet2').onclick = function () { history.back(); };
 
     $('backdrop').hidden = false;
     $('sheet').hidden = false;
-    requestAnimationFrame(function () {
-      $('backdrop').classList.add('show');
-      $('sheet').classList.add('show');
-    });
+    if (isFirstOpen) {
+      requestAnimationFrame(function () {
+        $('backdrop').classList.add('show');
+        $('sheet').classList.add('show');
+      });
+    }
     document.body.style.overflow = 'hidden';
 
     $('saveCard').onclick = function () {
@@ -347,7 +369,6 @@
         prompt('링크를 복사하세요', url);
       }
     };
-    $('closeSheet').onclick = function () { history.back(); };
   }
 
   function closeSheet() {
@@ -419,13 +440,28 @@
 
   window.addEventListener('hashchange', render);
 
+  /* 시트 상단 고정 버튼 (내용이 바뀌어도 유지되므로 한 번만 연결) */
+  $('closeSheet').addEventListener('click', function () { history.back(); });
+  ['prevDog', 'nextDog'].forEach(function (id) {
+    $(id).addEventListener('click', function () {
+      var next = this.dataset.go;
+      if (next) go('dog/' + encodeURIComponent(next));
+    });
+  });
+
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && sheetOpenId) history.back();
+    if (!sheetOpenId) return;
+    if (e.key === 'Escape') history.back();
+    if (e.key === 'ArrowLeft' && !$('prevDog').disabled) $('prevDog').click();
+    if (e.key === 'ArrowRight' && !$('nextDog').disabled) $('nextDog').click();
   });
 
   /* ── 시작 ───────────────────────────────────── */
   $('backBtn').innerHTML = Icon('back');
   $('searchBtn').innerHTML = Icon('search');
+  $('prevDog').innerHTML = Icon('back');
+  $('nextDog').innerHTML = Icon('back');
+  $('closeSheet').innerHTML = Icon('close');
   paintThemeButton();
   render();
 

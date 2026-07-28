@@ -42,7 +42,8 @@
     opts = opts || {};
     var src = dog.photoUrl || (dog.photo ? (opts.base || '') + dog.photo : '');
     var media = src
-      ? '<img src="' + esc(src) + '" alt="' + esc(dog.name) + ' 증명사진" loading="lazy" decoding="async">'
+      ? '<img src="' + esc(src) + '" alt="' + esc(dog.name) + ' 증명사진"' +
+        ' width="900" height="900" loading="lazy" decoding="async">'
       : '<div class="placeholder">' + paw() + '</div>';
 
     var badge = '';

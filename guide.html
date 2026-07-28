@@ -13,6 +13,9 @@
 <meta property="og:title" content="천사들의 보금자리 — 입양 · 봉사 안내">
 <meta property="og:description" content="입양 절차 확인, 입양 문의, 봉사 신청을 한곳에서.">
 <meta property="og:url" content="https://ggong162212-commits.github.io/Adoption/guide.html">
+<meta property="og:image" content="https://ggong162212-commits.github.io/Adoption/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +30,15 @@
 <style>
   main { padding: 14px 14px calc(48px + var(--safe-bottom)); }
 
+  .hello {
+    font-family: var(--display); font-weight: 500;
+    font-size: 17px; letter-spacing: -0.02em; color: var(--ink-2);
+    padding: 6px 2px 12px;
+  }
+
   /* 보호소 소개 */
   .intro {
+    margin-top: 6px;
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--r); box-shadow: var(--shadow-1);
     padding: 18px 17px; margin-bottom: 12px;
@@ -211,16 +221,7 @@
 
 <main class="wrap">
 
-  <section class="intro">
-    <div class="eyebrow">천사들의 보금자리란?</div>
-    <h2>안락사 없는 비영리 보호소입니다</h2>
-    <ul class="checks" id="checkList"></ul>
-    <div class="counts">
-      <div><b>160</b><span>마리의 강아지</span></div>
-      <div><b>60</b><span>마리의 고양이</span></div>
-    </div>
-    <div class="always" id="alwaysBox"></div>
-  </section>
+  <p class="hello">무엇을 도와드릴까요?</p>
 
   <nav class="menu" id="menu">
     <button data-panel="steps" class="on" data-icon="list">
@@ -253,7 +254,7 @@
       <ol class="flow">
         <li>
           <b>입양 신청서 작성</b>
-          <span>아래 <b>입양 문의</b> 양식을 작성해 카카오톡 채팅으로 보내주세요.</span>
+          <span>위쪽 <b>입양 문의</b> 버튼을 눌러 양식을 작성해 보내주세요.</span>
         </li>
         <li>
           <b>보호소 방문 (총 5회) · 소장님 만남</b>
@@ -412,6 +413,17 @@
         감사합니다 🐾
       </p>
     </div>
+  </section>
+
+  <section class="intro">
+    <div class="eyebrow">천사들의 보금자리란?</div>
+    <h2>안락사 없는 비영리 보호소입니다</h2>
+    <ul class="checks" id="checkList"></ul>
+    <div class="counts">
+      <div><b>160</b><span>마리의 강아지</span></div>
+      <div><b>60</b><span>마리의 고양이</span></div>
+    </div>
+    <div class="always" id="alwaysBox"></div>
   </section>
 
   <a class="backlink kakao" href="#" id="kakaoLink" target="_blank" rel="noopener"></a>
