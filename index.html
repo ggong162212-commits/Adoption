@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>천보금 입양 — 가족을 기다리는 아이들</title>
+<meta name="description" content="천보금 유기견 보호소의 아이들을 방별로 만나보세요. 증명사진과 함께 입양 가능한 아이들을 소개합니다.">
+<meta name="theme-color" content="#F3F6FB">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="천보금 입양">
+<meta property="og:title" content="🐕 천보금 입양">
+<meta property="og:description" content="가족을 기다리는 아이들을 방별로 만나보세요.">
+<meta property="og:url" content="https://ggong162212-commits.github.io/Adoption/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  main { padding: 12px 16px calc(40px + var(--safe-bottom)); }
+
+  /* 검색바 */
+  #searchBar { border-top: 1px solid var(--line); padding: 10px 16px 12px; }
+  #searchBar .inner { max-width: 640px; margin: 0 auto; }
+  .toggle-row { display: flex; align-items: center; gap: 8px; margin-top: 9px; }
+  .switch { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--text-sub); cursor: pointer; }
+  .switch input { width: 18px; height: 18px; accent-color: var(--brand); }
+
+  /* 요약 */
+  .summary {
+    display: flex; gap: 8px; margin-bottom: 14px;
+  }
+  .stat {
+    flex: 1; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 11px 12px; text-align: center;
+  }
+  .stat b { display: block; font-size: 19px; font-weight: 900; letter-spacing: -0.5px; }
+  .stat span { font-size: 11.5px; color: var(--text-sub); font-weight: 600; }
+  .stat.accent b { color: var(--ok); }
+
+  .notice {
+    background: var(--brand-soft); border: 1px solid #F6DCCD; color: var(--brand-dark);
+    border-radius: var(--radius-sm); padding: 11px 13px; font-size: 13.5px;
+    font-weight: 600; line-height: 1.55; margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: 13px; font-weight: 800; color: var(--text-sub);
+    margin: 4px 2px 10px; letter-spacing: -0.2px;
+  }
+
+  /* 방 그리드 */
+  .room-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 520px) { .room-grid { grid-template-columns: repeat(3, 1fr); } }
+  .room-btn {
+    position: relative; text-align: left;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 14px;
+    min-height: 92px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden;
+  }
+  .room-btn::before {
+    content: ''; position: absolute; inset: 0 auto 0 0; width: 5px;
+    background: var(--room-color, var(--brand));
+  }
+  .room-btn:active { transform: scale(.985); }
+  .room-btn .top { display: flex; align-items: center; gap: 7px; }
+  .room-btn .icon {
+    width: 34px; height: 34px; border-radius: 10px; flex: none;
+    display: grid; place-items: center; font-size: 18px;
+    background: var(--room-color, #eee);
+  }
+  .room-btn .name { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+  .room-btn .count { margin-top: 10px; font-size: 12.5px; color: var(--text-sub); font-weight: 600; }
+  .room-btn .count em { font-style: normal; color: var(--ok); font-weight: 800; }
+
+  /* 강아지 그리드 */
+  .dog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; }
+  @media (min-width: 520px) { .dog-grid { grid-template-columns: repeat(3, 1fr); } }
+  .dog-grid .idcard { text-align: left; width: 100%; }
+  .dog-grid .idcard:active { transform: scale(.985); }
+  .room-chip {
+    display: inline-block; margin-bottom: 12px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 700; color: var(--text-sub);
+  }
+
+  /* 상세 시트 */
+  .sheet-backdrop {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(17, 24, 39, .45);
+    opacity: 0; transition: opacity .22s;
+  }
+  .sheet-backdrop.show { opacity: 1; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 41;
+    background: var(--surface);
+    border-radius: 22px 22px 0 0;
+    box-shadow: var(--shadow-lg);
+    max-height: 92vh; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateY(100%); transition: transform .26s cubic-bezier(.32,.72,0,1);
+    padding-bottom: calc(20px + var(--safe-bottom));
+  }
+  .sheet.show { transform: translateY(0); }
+  .sheet-inner { max-width: 640px; margin: 0 auto; padding: 0 18px; }
+  .grabber { width: 40px; height: 4px; border-radius: 99px; background: #D6DBE3; margin: 10px auto 6px; }
+
+  .detail-photo {
+    aspect-ratio: 3/4; max-height: 46vh; margin: 6px auto 16px;
+    border-radius: var(--radius); overflow: hidden; background: #EDF1F7;
+    box-shadow: var(--shadow);
+  }
+  .detail-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-photo .placeholder { width: 100%; height: 100%; display: grid; place-items: center; font-size: 56px; opacity: .3; }
+
+  .detail-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+  .detail-head h2 { font-size: 22px; font-weight: 900; letter-spacing: -0.6px; }
+
+  .facts { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 14px; }
+  .fact { display: flex; padding: 11px 13px; font-size: 14px; }
+  .fact + .fact { border-top: 1px solid var(--line); }
+  .fact dt { width: 82px; flex: none; color: var(--text-sub); font-weight: 700; font-size: 13px; }
+  .fact dd { flex: 1; font-weight: 600; }
+
+  .note-box {
+    background: var(--bg); border-radius: var(--radius-sm);
+    padding: 13px; font-size: 14px; line-height: 1.65; margin-bottom: 16px;
+    white-space: pre-wrap;
+  }
+  .sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .sheet-actions .btn-block { grid-column: 1 / -1; }
+
+  .foot { text-align: center; padding: 28px 16px calc(20px + var(--safe-bottom)); color: var(--text-faint); font-size: 12px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <button id="backBtn" class="icon-btn" hidden aria-label="뒤로">←</button>
+    <div style="flex:1; min-width:0">
+      <h1 id="pageTitle">천보금 입양</h1>
+      <div class="sub" id="pageSub">가족을 기다리는 아이들</div>
+    </div>
+    <button id="searchBtn" class="icon-btn" aria-label="검색">🔎</button>
+  </div>
+  <div id="searchBar" hidden>
+    <div class="inner">
+      <input id="searchInput" class="input" type="search" placeholder="이름으로 찾기 (예: 마루)" autocomplete="off">
+      <div class="toggle-row">
+        <label class="switch"><input type="checkbox" id="onlyAdoptable"> 입양 가능한 아이만 보기</label>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="content"></div>
+</main>
+
+<footer class="foot">
+  천보금 유기견 보호소<br>
+  <span id="footContact"></span>
+</footer>
+
+<div id="backdrop" class="sheet-backdrop" hidden></div>
+<div id="sheet" class="sheet" role="dialog" aria-modal="true" aria-label="강아지 상세" hidden>
+  <div class="grabber"></div>
+  <div class="sheet-inner" id="sheetBody"></div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/idcard.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

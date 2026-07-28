@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "rooms": [
+    { "id": "마루", "icon": "🏡", "color": "#80DEEA", "order": 1 },
+    { "id": "거실", "icon": "🛋️", "color": "#A5D6A7", "order": 2 },
+    { "id": "소장님방", "icon": "🏠", "color": "#FF8A80", "order": 3 },
+    { "id": "병실", "icon": "🏥", "color": "#FFE082", "order": 4 },
+    { "id": "마당", "icon": "🌳", "color": "#F48FB1", "order": 5 },
+    { "id": "반달이네", "icon": "🌙", "color": "#C8E6C9", "order": 6 },
+    { "id": "봉봉이네", "icon": "🍯", "color": "#FFCC80", "order": 7 },
+    { "id": "사랑이네", "icon": "💕", "color": "#EF9A9A", "order": 8 },
+    { "id": "창고", "icon": "🛖", "color": "#CE93D8", "order": 9 },
+    { "id": "그레이", "icon": "🐺", "color": "#B0BEC5", "order": 10 }
+  ]
+}

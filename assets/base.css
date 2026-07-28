@@ -1,0 +1,178 @@
+/* 천보금 입양 — 공통 스타일 토큰 + 증명사진 카드 */
+
+:root {
+  --bg: #F3F6FB;
+  --surface: #FFFFFF;
+  --line: #E3E8F0;
+  --text: #1F2937;
+  --text-sub: #6B7280;
+  --text-faint: #9CA3AF;
+  --brand: #E4794B;
+  --brand-dark: #C85F35;
+  --brand-soft: #FFF1E9;
+  --ok: #2E9E6B;
+  --ok-soft: #E6F6EE;
+  --warn: #C79A22;
+  --warn-soft: #FDF4DC;
+  --done: #8B93A1;
+  --done-soft: #EEF0F3;
+  --danger: #D14343;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 10px rgba(31, 41, 55, 0.07);
+  --shadow-lg: 0 -8px 32px rgba(31, 41, 55, 0.18);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tap: 44px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
+  word-break: keep-all;
+}
+
+button, input, select, textarea { font-family: inherit; font-size: 16px; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+img { display: block; max-width: 100%; }
+
+.wrap { max-width: 640px; margin: 0 auto; }
+
+/* ── 헤더 ───────────────────────────────────── */
+.appbar {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(243, 246, 251, 0.92);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--line);
+  padding-top: var(--safe-top);
+}
+.appbar-inner {
+  max-width: 640px; margin: 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  min-height: var(--tap);
+}
+.appbar h1 { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; flex: 1; }
+.appbar .sub { font-size: 12px; color: var(--text-sub); font-weight: 500; }
+
+.icon-btn {
+  width: var(--tap); height: var(--tap);
+  display: grid; place-items: center;
+  border-radius: 12px; font-size: 20px; color: var(--text-sub);
+  flex: none;
+}
+.icon-btn:active { background: rgba(0,0,0,.05); }
+
+/* ── 폼 요소 ─────────────────────────────────── */
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; font-size: 13px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; }
+.input, .select, .textarea {
+  width: 100%; padding: 12px 14px; min-height: var(--tap);
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); outline: none;
+}
+.input:focus, .select:focus, .textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.textarea { resize: vertical; min-height: 84px; }
+.hint { font-size: 12px; color: var(--text-faint); margin-top: 6px; line-height: 1.45; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: var(--tap); padding: 0 18px;
+  border-radius: 12px; font-size: 15px; font-weight: 700;
+  background: var(--surface); border: 1px solid var(--line); color: var(--text);
+}
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .5; pointer-events: none; }
+.btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+.btn-danger { color: var(--danger); border-color: #F3D3D3; background: #FDF1F1; }
+.btn-block { width: 100%; }
+
+/* ── 상태 배지 ───────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; letter-spacing: -0.2px; white-space: nowrap;
+}
+.badge-adoptable { background: var(--ok-soft); color: var(--ok); }
+.badge-pending   { background: var(--warn-soft); color: var(--warn); }
+.badge-foster    { background: var(--brand-soft); color: var(--brand-dark); }
+.badge-adopted   { background: var(--done-soft); color: var(--done); }
+
+/* ── 증명사진 카드 (공개 사이트 · 관리자 미리보기 공용) ── */
+.idcard {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+.idcard-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(160deg, #EDF1F7 0%, #E2E8F0 100%);
+  overflow: hidden;
+}
+.idcard-photo img { width: 100%; height: 100%; object-fit: cover; }
+.idcard-photo .placeholder {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-size: 40px; opacity: .35;
+}
+.idcard-photo .badge { position: absolute; top: 8px; left: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.idcard.is-adopted .idcard-photo img { filter: grayscale(.7); }
+
+.idcard-caption {
+  padding: 9px 11px 11px;
+  border-top: 1px solid var(--line);
+}
+.idcard-name {
+  font-size: 15px; font-weight: 800; letter-spacing: -0.3px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.idcard-meta {
+  margin-top: 3px;
+  font-size: 12px; color: var(--text-sub);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── 빈 상태 / 로딩 ──────────────────────────── */
+.empty {
+  padding: 56px 24px; text-align: center; color: var(--text-sub);
+}
+.empty .emoji { font-size: 44px; margin-bottom: 12px; }
+.empty h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.empty p { font-size: 13.5px; line-height: 1.6; }
+
+.skeleton {
+  background: linear-gradient(100deg, #E8EDF4 30%, #F2F5F9 50%, #E8EDF4 70%);
+  background-size: 220% 100%;
+  animation: shimmer 1.2s linear infinite;
+  border-radius: var(--radius);
+}
+@keyframes shimmer { to { background-position: -220% 0; } }
+
+/* ── 토스트 ─────────────────────────────────── */
+#toast {
+  position: fixed; left: 50%; transform: translateX(-50%) translateY(20px);
+  bottom: calc(24px + var(--safe-bottom)); z-index: 100;
+  max-width: min(90vw, 420px);
+  background: #262F3D; color: #fff;
+  padding: 12px 18px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; text-align: center; line-height: 1.45;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  box-shadow: 0 6px 24px rgba(0,0,0,.25);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
