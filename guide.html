@@ -178,8 +178,16 @@
     margin-top: 18px; padding: 14px; width: 100%;
     font-size: 14px; font-weight: 600; color: var(--ink-2);
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+    text-decoration: none;
   }
   .backlink svg { width: 17px; height: 17px; }
+  .backlink.kakao {
+    margin-top: 18px; margin-bottom: -10px;
+    background: #FEE500; border-color: #F2D900; color: #191600;
+    font-weight: 700;
+  }
+  :root[data-theme="dark"] .backlink.kakao,
+  .backlink.kakao { color: #191600; }
 
   .foot {
     text-align: center; padding: 26px 16px calc(24px + var(--safe-bottom));
@@ -314,7 +322,8 @@
       <div class="eyebrow" style="margin:18px 0 7px">보낼 내용</div>
       <div class="preview" id="aPreview"></div>
       <div class="formfoot">
-        <button class="btn btn-primary btn-block" id="aCopy">복사하기</button>
+        <button class="btn btn-primary btn-block" id="aCopy">복사하고 카카오톡 열기</button>
+        <button class="btn btn-block" id="aCopyOnly">복사만 하기</button>
         <div class="err" id="aErr" hidden></div>
       </div>
     </div>
@@ -348,7 +357,8 @@
       <div class="eyebrow" style="margin:18px 0 7px">보낼 내용</div>
       <div class="preview" id="vPreview"></div>
       <div class="formfoot">
-        <button class="btn btn-primary btn-block" id="vCopy">복사하기</button>
+        <button class="btn btn-primary btn-block" id="vCopy">복사하고 카카오톡 열기</button>
+        <button class="btn btn-block" id="vCopyOnly">복사만 하기</button>
         <div class="err" id="vErr" hidden></div>
       </div>
       <div class="callout" id="vNote"></div>
@@ -404,6 +414,7 @@
     </div>
   </section>
 
+  <a class="backlink kakao" href="#" id="kakaoLink" target="_blank" rel="noopener"></a>
   <a class="backlink" href="./" id="backLink"></a>
 </main>
 
@@ -554,7 +565,13 @@
     });
   }
 
-  function wire(btnId, errId, nameId, textFn, emptyMsg) {
+  var KAKAO = 'https://pf.kakao.com/_HBFxnX/chat';
+
+  /**
+   * openKakao 가 true 면 복사 성공 후 카카오톡 채팅으로 넘어간다.
+   * 복사가 실패하면 넘어가지 않는다 — 빈손으로 채팅방에 도착하는 게 제일 나쁘다.
+   */
+  function wire(btnId, errId, nameId, textFn, emptyMsg, openKakao) {
     $(btnId).addEventListener('click', function () {
       var err = $(errId);
       if (!val(nameId)) {
@@ -565,16 +582,23 @@
       }
       err.hidden = true;
       copy(textFn()).then(function () {
-        toast('복사했어요. 카카오톡 채팅에 붙여넣어 주세요.');
+        if (!openKakao) { toast('복사했어요. 카카오톡 채팅에 붙여넣어 주세요.'); return; }
+        toast('복사했어요. 채팅창에 붙여넣기 해주세요.');
+        setTimeout(function () { location.href = KAKAO; }, 700);
       }).catch(function () {
         err.hidden = false;
-        err.textContent = '복사가 안 되면 위 내용을 길게 눌러 직접 복사해 주세요.';
+        err.textContent = '복사가 안 되면 위 내용을 길게 눌러 직접 복사한 뒤, 아래 버튼으로 카카오톡을 열어주세요.';
       });
     });
   }
 
-  wire('aCopy', 'aErr', 'aName', adoptText, '이름을 입력해 주세요.');
-  wire('vCopy', 'vErr', 'vName', volunteerText, '이름을 입력해 주세요.');
+  wire('aCopy', 'aErr', 'aName', adoptText, '이름을 입력해 주세요.', true);
+  wire('aCopyOnly', 'aErr', 'aName', adoptText, '이름을 입력해 주세요.', false);
+  wire('vCopy', 'vErr', 'vName', volunteerText, '이름을 입력해 주세요.', true);
+  wire('vCopyOnly', 'vErr', 'vName', volunteerText, '이름을 입력해 주세요.', false);
+
+  $('kakaoLink').href = KAKAO;
+  $('kakaoLink').innerHTML = Icon('chat') + '카카오톡으로 문의하기';
 })();
 </script>
 </body>
