@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>천사들의 보금자리 — 입양 · 봉사 안내</title>
+<meta name="description" content="안락사 없는 비영리 보호소, 천사들의 보금자리. 입양 절차와 봉사 신청을 안내합니다.">
+<meta name="theme-color" content="#F3F5EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131711" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="천사들의 보금자리">
+<meta property="og:title" content="천사들의 보금자리 — 입양 · 봉사 안내">
+<meta property="og:description" content="입양 절차 확인, 입양 문의, 봉사 신청을 한곳에서.">
+<meta property="og:url" content="https://ggong162212-commits.github.io/Adoption/guide.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
+<script>
+  try {
+    var t = localStorage.getItem('adoption.theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+<style>
+  main { padding: 14px 14px calc(48px + var(--safe-bottom)); }
+
+  /* 보호소 소개 */
+  .intro {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); box-shadow: var(--shadow-1);
+    padding: 18px 17px; margin-bottom: 12px;
+  }
+  .intro h2 {
+    font-family: var(--display); font-weight: 700; font-size: 20px;
+    letter-spacing: -0.03em; margin: 5px 0 14px;
+  }
+  .checks { list-style: none; display: grid; gap: 9px; margin-bottom: 15px; }
+  .checks li { position: relative; padding-left: 26px; font-size: 14px; line-height: 1.55; }
+  .checks li svg { position: absolute; left: 0; top: 3px; width: 16px; height: 16px; color: var(--accent); }
+
+  .counts { display: flex; gap: 8px; margin-bottom: 14px; }
+  .counts div {
+    flex: 1; background: var(--ground-2); border-radius: var(--r-sm);
+    padding: 11px 12px; text-align: center;
+  }
+  .counts b {
+    display: block; font-family: var(--display); font-weight: 700; font-size: 21px;
+    letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  }
+  .counts span { font-size: 11.5px; color: var(--ink-3); font-weight: 500; }
+
+  .always {
+    display: flex; gap: 9px; align-items: flex-start;
+    background: var(--accent-soft); color: var(--accent);
+    border-radius: var(--r-sm); padding: 11px 13px;
+    font-size: 13px; font-weight: 600; line-height: 1.55;
+  }
+  .always svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+
+  /* 큰 버튼 메뉴 */
+  .menu {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 16px;
+    /* 고정 헤더가 메뉴 윗줄을 가리지 않도록 */
+    scroll-margin-top: calc(66px + var(--safe-top));
+  }
+  .menu button {
+    display: grid; gap: 7px; justify-items: start; text-align: left;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); padding: 15px 14px; min-height: 92px;
+    box-shadow: var(--shadow-1);
+    transition: transform .16s cubic-bezier(.32,.72,0,1), box-shadow .16s, border-color .16s;
+  }
+  .menu button:hover { box-shadow: var(--shadow-2); transform: translateY(-1px); }
+  .menu button:active { transform: scale(.985); }
+  .menu button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .menu .ic {
+    width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
+    background: var(--ground-2); color: var(--accent);
+  }
+  .menu button.on .ic { background: var(--surface); }
+  .menu .ic svg { width: 17px; height: 17px; }
+  .menu .t { font-family: var(--display); font-weight: 600; font-size: 15.5px; letter-spacing: -0.02em; }
+  .menu .d { font-size: 11.5px; color: var(--ink-3); font-weight: 500; line-height: 1.45; }
+
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  .sheetcard {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); box-shadow: var(--shadow-1);
+    padding: 18px 17px; margin-bottom: 12px;
+  }
+  .sheetcard > h3 {
+    font-family: var(--display); font-weight: 600; font-size: 17px;
+    letter-spacing: -0.02em; margin-bottom: 6px;
+  }
+  .sheetcard > .sub { font-size: 13px; color: var(--ink-3); line-height: 1.6; margin-bottom: 16px; }
+
+  /* 입양 절차 */
+  .flow { list-style: none; counter-reset: step; display: grid; gap: 16px; }
+  .flow li { position: relative; padding-left: 36px; }
+  .flow li::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: 0;
+    width: 24px; height: 24px; border-radius: 8px;
+    background: var(--accent); color: var(--accent-ink);
+    font-size: 12px; font-weight: 700; display: grid; place-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .flow li::after {
+    content: ''; position: absolute; left: 11.5px; top: 30px; bottom: -16px;
+    width: 1px; background: var(--line);
+  }
+  .flow li:last-child::after { display: none; }
+  .flow b { display: block; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .flow span { display: block; font-size: 13.5px; color: var(--ink-2); line-height: 1.65; margin-top: 3px; }
+
+  .callout {
+    display: flex; gap: 9px; align-items: flex-start;
+    background: var(--honey-soft); border: 1px solid color-mix(in srgb, var(--honey) 26%, transparent);
+    color: color-mix(in srgb, var(--honey) 76%, var(--ink));
+    border-radius: var(--r-sm); padding: 12px 13px;
+    font-size: 12.5px; line-height: 1.65; margin-top: 16px;
+  }
+  .callout svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+
+  /* 주의사항 */
+  .rules { display: grid; gap: 18px; }
+  .rules section > h4 {
+    font-size: 13px; font-weight: 700; color: var(--accent);
+    letter-spacing: .02em; margin-bottom: 9px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .rules section > h4 svg { width: 15px; height: 15px; }
+  .rules ul { list-style: none; display: grid; gap: 8px; }
+  .rules li {
+    position: relative; padding-left: 14px;
+    font-size: 13.5px; line-height: 1.7; color: var(--ink-2);
+  }
+  .rules li::before {
+    content: ''; position: absolute; left: 2px; top: 10px;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--line-2);
+  }
+  .rules li b { color: var(--ink); font-weight: 700; }
+  .closing {
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--ink-2); line-height: 1.7; text-align: center;
+  }
+
+  /* 양식 */
+  .radios { display: flex; flex-wrap: wrap; gap: 7px; }
+  .radios label {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 13px; min-height: var(--tap);
+    border: 1px solid var(--line); border-radius: 11px;
+    background: var(--surface); font-size: 13.5px; font-weight: 500;
+    cursor: pointer; transition: border-color .15s, background-color .15s;
+  }
+  .radios input { accent-color: var(--accent); width: 16px; height: 16px; }
+  .radios label:has(input:checked) {
+    border-color: var(--accent); background: var(--accent-soft); font-weight: 600;
+  }
+
+  .preview {
+    background: var(--ground-2); border-radius: var(--r-sm);
+    padding: 13px 14px; margin: 4px 0 12px;
+    font-size: 13px; line-height: 1.75; white-space: pre-wrap;
+    color: var(--ink-2); word-break: break-all;
+  }
+  .formfoot { display: grid; gap: 8px; }
+  .err { color: #C0554F; font-size: 12.5px; font-weight: 600; text-align: center; }
+
+  .backlink {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 18px; padding: 14px; width: 100%;
+    font-size: 14px; font-weight: 600; color: var(--ink-2);
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  }
+  .backlink svg { width: 17px; height: 17px; }
+
+  .foot {
+    text-align: center; padding: 26px 16px calc(24px + var(--safe-bottom));
+    color: var(--ink-3); font-size: 12px; line-height: 1.8;
+  }
+  .foot .mark { font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand">
+      <h1>천사들의 보금자리</h1>
+      <div class="sub">입양 · 봉사 안내</div>
+    </div>
+    <a class="icon-btn" href="./" aria-label="아이들 보러 가기" id="dogsLink"></a>
+    <button id="themeBtn" class="icon-btn" aria-label="화면 밝기 전환"></button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro">
+    <div class="eyebrow">천사들의 보금자리란?</div>
+    <h2>안락사 없는 비영리 보호소입니다</h2>
+    <ul class="checks" id="checkList"></ul>
+    <div class="counts">
+      <div><b>160</b><span>마리의 강아지</span></div>
+      <div><b>60</b><span>마리의 고양이</span></div>
+    </div>
+    <div class="always" id="alwaysBox"></div>
+  </section>
+
+  <nav class="menu" id="menu">
+    <button data-panel="steps" class="on" data-icon="list">
+      <span class="ic"></span>
+      <span class="t">입양 절차</span>
+      <span class="d">어떻게 진행되는지 먼저 확인하세요</span>
+    </button>
+    <button data-panel="adopt" data-icon="heart">
+      <span class="ic"></span>
+      <span class="t">입양 문의</span>
+      <span class="d">양식을 작성해 채팅방에 보내주세요</span>
+    </button>
+    <button data-panel="volunteer" data-icon="paw">
+      <span class="ic"></span>
+      <span class="t">봉사 신청</span>
+      <span class="d">이름 · 인원 · 날짜만 알려주세요</span>
+    </button>
+    <button data-panel="rules" data-icon="check">
+      <span class="ic"></span>
+      <span class="t">봉사 주의사항</span>
+      <span class="d">오시기 전에 꼭 읽어주세요</span>
+    </button>
+  </nav>
+
+  <!-- 입양 절차 -->
+  <section class="panel on" id="panel-steps">
+    <div class="sheetcard">
+      <h3>입양은 이렇게 진행돼요</h3>
+      <p class="sub">서두르지 않습니다. 아이와 사람이 서로 익숙해질 시간을 충분히 갖습니다.</p>
+      <ol class="flow">
+        <li>
+          <b>입양 신청서 작성</b>
+          <span>아래 <b>입양 문의</b> 양식을 작성해 오픈채팅방으로 보내주세요.</span>
+        </li>
+        <li>
+          <b>보호소 방문 (총 5회) · 소장님 만남</b>
+          <span>다섯 번에 걸쳐 보호소를 찾아와 아이를 만납니다. 소장님과 이야기를 나누며 서로에게 맞는지 함께 살펴봅니다.</span>
+        </li>
+        <li>
+          <b>입양</b>
+          <span>다섯 번의 만남 끝에 서로 준비가 되면, 아이와 함께 집으로 갑니다.</span>
+        </li>
+      </ol>
+      <div class="callout" id="visitNote"></div>
+    </div>
+    <div class="sheetcard">
+      <h3>보호소 주소는 왜 바로 알려드리지 않나요</h3>
+      <p class="sub" style="margin:0">
+        주소가 공개되면 아이를 몰래 두고 가시는 분들이 생기고, 개장수의 표적이 되기도 합니다.
+        아이들의 안전을 위해 <b>입양 문의나 봉사 신청을 접수한 뒤 개별로 안내</b>드리고 있습니다.
+        번거로우시더라도 양해 부탁드립니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 입양 문의 -->
+  <section class="panel" id="panel-adopt">
+    <div class="sheetcard">
+      <h3>입양 문의</h3>
+      <p class="sub">
+        작성하신 내용은 어디로도 전송되지 않습니다. 아래 <b>복사하기</b>를 누른 뒤
+        오픈채팅방에 붙여넣어 주세요.
+      </p>
+
+      <label class="field"><span>관심 있는 아이</span>
+        <input id="aDog" class="input" type="text" placeholder="예: 나무 / 아직 못 정했어요" maxlength="40"></label>
+      <label class="field"><span>이름 *</span>
+        <input id="aName" class="input" type="text" placeholder="성함" maxlength="20"></label>
+      <label class="field"><span>사는 곳</span>
+        <input id="aArea" class="input" type="text" placeholder="예: 서울 은평구" maxlength="30"></label>
+      <label class="field"><span>나이</span>
+        <input id="aAge" class="input" type="text" inputmode="numeric" placeholder="예: 34" maxlength="10"></label>
+      <label class="field"><span>함께 사는 가족</span>
+        <input id="aFamily" class="input" type="text" placeholder="예: 배우자, 자녀 1명 (초등학생)" maxlength="60"></label>
+
+      <div class="field"><span>가족 모두가 입양에 동의하셨나요?</span>
+        <div class="radios">
+          <label><input type="radio" name="agree" value="네, 모두 동의했습니다" checked> 네</label>
+          <label><input type="radio" name="agree" value="아직 이야기 중입니다"> 아직 이야기 중</label>
+        </div>
+      </div>
+
+      <label class="field"><span>주거 형태</span>
+        <input id="aHome" class="input" type="text" placeholder="예: 아파트 자가 / 빌라 전세 (반려동물 가능)" maxlength="50"></label>
+
+      <div class="field"><span>강아지를 키워본 경험</span>
+        <div class="radios">
+          <label><input type="radio" name="exp" value="있습니다" checked> 있어요</label>
+          <label><input type="radio" name="exp" value="없습니다"> 없어요</label>
+          <label><input type="radio" name="exp" value="지금도 키우고 있습니다"> 지금도 키우는 중</label>
+        </div>
+      </div>
+
+      <label class="field"><span>입양을 신청하는 이유</span>
+        <textarea id="aReason" class="textarea" placeholder="편하게 적어주세요." maxlength="400"></textarea></label>
+      <label class="field"><span>연락 가능한 번호</span>
+        <input id="aPhone" class="input" type="tel" placeholder="010-0000-0000" maxlength="20"></label>
+
+      <div class="eyebrow" style="margin:18px 0 7px">보낼 내용</div>
+      <div class="preview" id="aPreview"></div>
+      <div class="formfoot">
+        <button class="btn btn-primary btn-block" id="aCopy">복사하기</button>
+        <div class="err" id="aErr" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 봉사 신청 -->
+  <section class="panel" id="panel-volunteer">
+    <div class="sheetcard">
+      <h3>봉사 신청</h3>
+      <p class="sub">
+        봉사는 <b>오전 10시</b>에 시작합니다. 작성 후 <b>복사하기</b>를 눌러
+        오픈채팅방에 붙여넣어 주세요.
+      </p>
+
+      <label class="field"><span>이름 *</span>
+        <input id="vName" class="input" type="text" placeholder="성함" maxlength="20"></label>
+      <label class="field"><span>인원</span>
+        <input id="vCount" class="input" type="number" min="1" max="30" value="1"></label>
+      <label class="field"><span>희망 날짜</span>
+        <input id="vDate" class="input" type="date"></label>
+      <label class="field"><span>연락 가능한 번호</span>
+        <input id="vPhone" class="input" type="tel" placeholder="010-0000-0000" maxlength="20"></label>
+
+      <div class="field"><span>봉사가 처음이신가요?</span>
+        <div class="radios">
+          <label><input type="radio" name="vfirst" value="처음입니다" checked> 처음이에요</label>
+          <label><input type="radio" name="vfirst" value="와본 적 있습니다"> 와본 적 있어요</label>
+        </div>
+      </div>
+
+      <div class="eyebrow" style="margin:18px 0 7px">보낼 내용</div>
+      <div class="preview" id="vPreview"></div>
+      <div class="formfoot">
+        <button class="btn btn-primary btn-block" id="vCopy">복사하기</button>
+        <div class="err" id="vErr" hidden></div>
+      </div>
+      <div class="callout" id="vNote"></div>
+    </div>
+  </section>
+
+  <!-- 봉사 주의사항 -->
+  <section class="panel" id="panel-rules">
+    <div class="sheetcard">
+      <h3>봉사 주의사항</h3>
+      <p class="sub">안전하고 원활한 봉사 활동을 위해 아래 사항을 꼭 지켜주시기 바랍니다.</p>
+
+      <div class="rules">
+        <section>
+          <h4>활동 전</h4>
+          <ul>
+            <li>편한 복장 착용 부탁드립니다.</li>
+            <li>봉사는 <b>오전 10시</b>부터 시작되니 늦지 않게 도착 부탁드립니다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>활동 중</h4>
+          <ul>
+            <li>보호소 담당자 또는 운영진의 안내를 우선으로 따라주세요.</li>
+            <li>견사 및 묘사 <b>문 단속</b>을 철저하게 지켜주세요.</li>
+            <li>봉사활동은 아이들이 지내는 환경을 깨끗하게 유지하기 위한 활동이니, <b>적극적인 참여</b> 부탁드립니다.</li>
+            <li>사진 촬영은 자유롭게 가능합니다. 발자국 인스타그램 태그 후 스토리 공유해주시면 감사하겠습니다 😊</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>활동 후</h4>
+          <ul>
+            <li>사용한 물품은 정리 후 제자리에 배치해주세요.</li>
+            <li>쓰레기는 반드시 쓰레기봉투에 넣어 정리해주세요.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>기타</h4>
+          <ul>
+            <li>안전사고 예방을 위해 단독 행동은 자제해주세요.</li>
+            <li>부득이한 사정으로 참여가 어려운 경우, <b>봉사 하루 전날까지</b> 취소 가능합니다.</li>
+          </ul>
+        </section>
+      </div>
+
+      <p class="closing">
+        모두가 안전하고 의미 있는 활동이 될 수 있도록 협조 부탁드립니다 😊<br>
+        감사합니다 🐾
+      </p>
+    </div>
+  </section>
+
+  <a class="backlink" href="./" id="backLink"></a>
+</main>
+
+<footer class="foot">
+  <div class="mark">천사들의 보금자리</div>
+  안락사 없는 비영리 보호소
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/icons.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ── 아이콘 ── */
+  $('checkList').innerHTML = [
+    '안락사 없는 비영리 보호소',
+    '안락사 직전 구조된 아이들',
+    '병으로 유기된 아이들',
+    '개장수에게 구조된 아이들'
+  ].map(function (t) { return '<li>' + Icon('check') + t + '</li>'; }).join('');
+
+  $('alwaysBox').innerHTML = Icon('home') + '<span>소장님이 365일, 24시간 상주하고 계십니다.</span>';
+  $('visitNote').innerHTML = Icon('heart') +
+    '<span>다섯 번의 방문은 번거로우실 수 있지만, 아이가 새 가족을 낯설어하지 않도록 그리고 서로 확신을 갖고 시작할 수 있도록 꼭 필요한 과정입니다.</span>';
+  $('vNote').innerHTML = Icon('heart') +
+    '<span>보호소 주소는 신청을 확인한 뒤 채팅방에서 개별로 안내드립니다.</span>';
+  $('dogsLink').innerHTML = Icon('paw');
+  $('backLink').innerHTML = Icon('paw') + '가족을 기다리는 아이들 보러 가기';
+
+  /* ── 테마 ── */
+  var THEME_KEY = 'adoption.theme';
+  function currentTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+    if (saved === 'light' || saved === 'dark') return saved;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function paintTheme() {
+    var dark = currentTheme() === 'dark';
+    $('themeBtn').innerHTML = Icon(dark ? 'sun' : 'moon');
+    $('themeBtn').setAttribute('aria-label', dark ? '밝은 화면으로' : '어두운 화면으로');
+  }
+  $('themeBtn').addEventListener('click', function () {
+    var next = currentTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+    paintTheme();
+  });
+  paintTheme();
+
+  /* ── 메뉴 ── */
+  document.querySelectorAll('#menu button').forEach(function (btn) {
+    btn.querySelector('.ic').innerHTML = Icon(btn.dataset.icon);
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('#menu button').forEach(function (b) { b.classList.remove('on'); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
+      btn.classList.add('on');
+      $('panel-' + btn.dataset.panel).classList.add('on');
+      location.hash = btn.dataset.panel;
+      $('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  var h = location.hash.replace('#', '');
+  if (h) {
+    var target = document.querySelector('#menu button[data-panel="' + h + '"]');
+    if (target) {
+      document.querySelectorAll('#menu button').forEach(function (b) { b.classList.remove('on'); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
+      target.classList.add('on');
+      $('panel-' + h).classList.add('on');
+    }
+  }
+
+  /* ── 토스트 ── */
+  var toastTimer;
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
+  }
+
+  function val(id) { return ($(id).value || '').trim(); }
+  function radio(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '';
+  }
+  function line(label, value) { return value ? label + ' : ' + value + '\n' : ''; }
+
+  /* ── 입양 문의 양식 ── */
+  function adoptText() {
+    return '[입양 문의]\n' +
+      line('관심 있는 아이', val('aDog')) +
+      line('이름', val('aName')) +
+      line('사는 곳', val('aArea')) +
+      line('나이', val('aAge')) +
+      line('함께 사는 가족', val('aFamily')) +
+      line('가족 동의', radio('agree')) +
+      line('주거 형태', val('aHome')) +
+      line('반려견 경험', radio('exp')) +
+      line('연락처', val('aPhone')) +
+      (val('aReason') ? '입양 신청 이유\n' + val('aReason') + '\n' : '');
+  }
+
+  /* ── 봉사 신청 양식 ── */
+  function volunteerText() {
+    var d = val('vDate');
+    if (d) {
+      var p = d.split('-');
+      d = p[0] + '년 ' + Number(p[1]) + '월 ' + Number(p[2]) + '일';
+    }
+    return '[봉사 신청]\n' +
+      line('이름', val('vName')) +
+      line('인원', val('vCount') ? val('vCount') + '명' : '') +
+      line('희망 날짜', d) +
+      line('연락처', val('vPhone')) +
+      line('봉사 경험', radio('vfirst'));
+  }
+
+  function refresh() {
+    $('aPreview').textContent = adoptText();
+    $('vPreview').textContent = volunteerText();
+  }
+  document.addEventListener('input', refresh);
+  document.addEventListener('change', refresh);
+  refresh();
+
+  /* ── 복사 ── */
+  function copy(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      ok ? resolve() : reject(new Error('복사에 실패했습니다.'));
+    });
+  }
+
+  function wire(btnId, errId, nameId, textFn, emptyMsg) {
+    $(btnId).addEventListener('click', function () {
+      var err = $(errId);
+      if (!val(nameId)) {
+        err.hidden = false;
+        err.textContent = emptyMsg;
+        $(nameId).focus();
+        return;
+      }
+      err.hidden = true;
+      copy(textFn()).then(function () {
+        toast('복사했어요. 오픈채팅방에 붙여넣어 주세요.');
+      }).catch(function () {
+        err.hidden = false;
+        err.textContent = '복사가 안 되면 위 내용을 길게 눌러 직접 복사해 주세요.';
+      });
+    });
+  }
+
+  wire('aCopy', 'aErr', 'aName', adoptText, '이름을 입력해 주세요.');
+  wire('vCopy', 'vErr', 'vName', volunteerText, '이름을 입력해 주세요.');
+})();
+</script>
+</body>
+</html>

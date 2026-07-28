@@ -134,6 +134,7 @@
       '<ol class="flow">' + steps.map(function (s) {
         return '<li><b>' + esc(s.title) + '</b><span>' + esc(s.desc) + '</span></li>';
       }).join('') + '</ol>' +
+      '<a class="guide-link" href="guide.html">입양 문의 · 봉사 신청하기' + Icon('back') + '</a>' +
     '</section>';
   }
 
