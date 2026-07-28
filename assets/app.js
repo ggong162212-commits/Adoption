@@ -124,6 +124,19 @@
     if (rest > 0) html += '<span class="more">+' + rest + '</span>';
     return '<div class="faces">' + html + '</div>';
   }
+  /** 입양 절차 — 문의 전에 무엇을 하게 되는지 몰라 망설이는 걸 줄인다 */
+  function guideHTML() {
+    var steps = state.site.adoptionSteps;
+    if (!steps || !steps.length) return '';
+    return '<section class="guide">' +
+      '<div class="eyebrow">입양 안내</div>' +
+      '<h3>입양은 이렇게 진행돼요</h3>' +
+      '<ol class="flow">' + steps.map(function (s) {
+        return '<li><b>' + esc(s.title) + '</b><span>' + esc(s.desc) + '</span></li>';
+      }).join('') + '</ol>' +
+    '</section>';
+  }
+
   function filterLine() {
     if (!hasNonAdoptable()) return '';
     return '<label class="filterline"><input type="checkbox" id="onlyAdoptable"' +
@@ -150,6 +163,7 @@
     html += filterLine();
     html += list.length ? grid(list)
       : empty('paw', '해당하는 아이가 없어요', '필터를 끄면 다른 아이들도 볼 수 있어요.');
+    html += guideHTML();
     $('content').innerHTML = html;
   }
 
@@ -171,6 +185,7 @@
         faces(list) +
       '</button>';
     }).join('') + '</div>';
+    html += guideHTML();
     $('content').innerHTML = html;
   }
 

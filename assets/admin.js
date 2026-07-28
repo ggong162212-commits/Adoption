@@ -504,6 +504,9 @@
     $('sTitle').value = s.title || '';
     $('sTagline').value = s.tagline || '';
     $('sNotice').value = s.notice || '';
+    $('sSteps').value = (s.adoptionSteps || []).map(function (x) {
+      return x.title + ' | ' + x.desc;
+    }).join('\n');
     $('sPhone').value = c.phone || '';
     $('sKakao').value = c.kakaoUrl || '';
     $('sInsta').value = c.instagram || '';
@@ -515,6 +518,11 @@
       title: $('sTitle').value.trim() || '천보금 입양',
       tagline: $('sTagline').value.trim(),
       notice: $('sNotice').value.trim(),
+      adoptionSteps: $('sSteps').value.split('\n').map(function (line) {
+        var i = line.indexOf('|');
+        if (i < 0) return { title: line.trim(), desc: '' };
+        return { title: line.slice(0, i).trim(), desc: line.slice(i + 1).trim() };
+      }).filter(function (s) { return s.title; }),
       contact: {
         phone: $('sPhone').value.trim(),
         kakaoUrl: $('sKakao').value.trim(),
